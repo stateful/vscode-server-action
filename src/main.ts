@@ -10,7 +10,7 @@ const run = async (): Promise<void> => {
     || `machine-${Date.now()}`
   ).slice(0, 20)
 
-  await promisify(exec)(`code-server rename --name ${machineId}`)
+  await promisify(exec)(`code-server --accept-server-license-terms rename --name ${machineId}`)
   spawn('code-server', [], {
     stdio: [process.stdin, process.stdout, process.stderr]
   })

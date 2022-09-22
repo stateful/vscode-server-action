@@ -2829,7 +2829,7 @@ const run = async () => {
     const machineId = ((0, core_1.getInput)('machineName')
         || process.env.GITHUB_RUN_ID
         || `machine-${Date.now()}`).slice(0, 20);
-    await (0, node_util_1.promisify)(node_child_process_1.exec)(`code-server rename --name ${machineId}`);
+    await (0, node_util_1.promisify)(node_child_process_1.exec)(`code-server --accept-server-license-terms rename --name ${machineId}`);
     (0, node_child_process_1.spawn)('code-server', [], {
         stdio: [process.stdin, process.stdout, process.stderr]
     });
