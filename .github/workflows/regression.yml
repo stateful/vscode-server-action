@@ -1,0 +1,39 @@
+--- 
+jobs: 
+  regression: 
+    name: regression
+    runs-on: ubuntu-20.04
+    steps: 
+      - 
+        name: "Git Checkout"
+        uses: actions/checkout@v2
+        with: 
+          path: regression
+      - 
+        id: build_id
+        name: "Set build id"
+        run: "echo \"::set-output name=id::$(date +%s)\""
+      - 
+        id: token-collection
+        name: "Generate GitHub App JWT"
+        uses: getsentry/action-github-app-token@v1
+        with: 
+          app_id: "${{ secrets.APP_ID }}"
+          private_key: "${{ secrets.APP_KEY }}"
+      - 
+        env: 
+          GITHUB_TOKEN: "${{ steps.token-collection.outputs.token }}"
+        name: "Test Action"
+        uses: ./regression
+        with: 
+          exampleInput: "${{ github.event.inputs.exampleInput }}"
+
+name: "Regression Testing"
+? "on"
+: 
+  workflow_dispatch: 
+    inputs: 
+      exampleInput: 
+        default: xys
+        description: "xyz"
+        required: true
