@@ -2824,7 +2824,7 @@ const run = async () => {
     await new Promise((resolve, reject) => (child.on('exit', (exit) => exit === 0
         ? resolve()
         : reject(new Error('Failed to set machine name')))));
-    (0, node_child_process_1.spawn)('code-server', [], {
+    (0, node_child_process_1.spawn)('code-server', ['--accept-server-license-terms'], {
         stdio: [process.stdin, process.stdout, process.stderr]
     });
 };

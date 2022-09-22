@@ -20,7 +20,7 @@ const run = async (): Promise<void> => {
       : reject(new Error('Failed to set machine name')))
   ))
 
-  spawn('code-server', [], {
+  spawn('code-server', ['--accept-server-license-terms'], {
     stdio: [process.stdin, process.stdout, process.stderr]
   })
 }
