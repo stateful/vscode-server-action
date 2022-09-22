@@ -16,12 +16,14 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: "16"
+    - name: Install
+      run: yarn install --frozen-lockfile
+    - name: Lint
+      run: yarn run lint:check
+    - name: Build
+      run: npm run build
     - uses: ./
-    # - name: Setup Node
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: "16"
-    # - name: Install
-    #   run: yarn install --frozen-lockfile
-    # - name: Lint
-    #   run: yarn run lint:check
