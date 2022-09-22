@@ -18,10 +18,10 @@ jobs:
         node-version: "16"
     - name: Install
       run: yarn install --frozen-lockfile
-    - name: Lint
-      run: yarn run lint:check
     - name: Build
       run: npm run build
+    - name: Test
+      run: yarn run test
     # To test the GitHub Action just uncommint this line and push
     # the change to a branch
     # - uses: ./

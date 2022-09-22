@@ -1,8 +1,13 @@
+import { resolve } from 'path';
+import { fileURLToPath } from 'url'
 import { spawn } from 'node:child_process'
 
 import { getInput } from '@actions/core'
 
-const run = async (): Promise<void> => {
+const nodePath = resolve(process.argv[1]);
+const modulePath = resolve(fileURLToPath(import.meta.url))
+
+export const run = async (): Promise<void> => {
   /**
    * name of the machine to access
    */
@@ -51,4 +56,9 @@ const run = async (): Promise<void> => {
   })
 }
 
-run()
+/**
+ * only run action if module is called through Node
+ */
+if (nodePath === modulePath) {
+  run()
+}

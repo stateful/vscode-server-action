@@ -2729,14 +2729,6 @@ module.exports = require("net");
 
 /***/ }),
 
-/***/ 718:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("node:child_process");
-
-/***/ }),
-
 /***/ 37:
 /***/ ((module) => {
 
@@ -2802,6 +2794,34 @@ module.exports = require("util");
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
@@ -2811,30 +2831,48 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-var exports = __webpack_exports__;
+// ESM COMPAT FLAG
+__nccwpck_require__.r(__webpack_exports__);
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const node_child_process_1 = __nccwpck_require__(718);
-const core_1 = __nccwpck_require__(186);
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "run": () => (/* binding */ run)
+});
+
+// EXTERNAL MODULE: external "path"
+var external_path_ = __nccwpck_require__(17);
+;// CONCATENATED MODULE: external "url"
+const external_url_namespaceObject = require("url");
+;// CONCATENATED MODULE: external "node:child_process"
+const external_node_child_process_namespaceObject = require("node:child_process");
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(186);
+;// CONCATENATED MODULE: ./src/main.ts
+
+
+
+
+const nodePath = (0,external_path_.resolve)(process.argv[1]);
+const modulePath = (0,external_path_.resolve)((0,external_url_namespaceObject.fileURLToPath)("file:///Users/christianbromann/Sites/Stateful/projects/vscode-server-action/src/main.ts"));
 const run = async () => {
     /**
      * name of the machine to access
      */
-    const machineId = ((0, core_1.getInput)('machineName')
+    const machineId = ((0,core.getInput)('machineName')
         || process.env.GITHUB_RUN_ID
         || `machine-${Date.now()}`).slice(0, 20);
     /**
      * The time until the action continues the build of the machine
      * does not get authorised
      */
-    const timeout = (parseInt((0, core_1.getInput)('timeout'), 10)
+    const timeout = (parseInt((0,core.getInput)('timeout'), 10)
         || 30 * 1000 // default 30s
     );
     /**
      * name the machine as an individual command so that we don't
      * get prompt when launching the server
      */
-    const child = (0, node_child_process_1.spawn)('code-server', ['--accept-server-license-terms', 'rename', '--name', machineId], { stdio: [process.stdin, process.stdout, process.stderr] });
+    const child = (0,external_node_child_process_namespaceObject.spawn)('code-server', ['--accept-server-license-terms', 'rename', '--name', machineId], { stdio: [process.stdin, process.stdout, process.stderr] });
     const startServer = await new Promise((resolve, reject) => {
         const t = setTimeout(() => resolve(false), timeout);
         child.on('exit', (exit) => {
@@ -2847,11 +2885,16 @@ const run = async () => {
     if (!startServer) {
         return console.log('Timeout reached, continuing the build');
     }
-    (0, node_child_process_1.spawn)('code-server', ['--accept-server-license-terms'], {
+    (0,external_node_child_process_namespaceObject.spawn)('code-server', ['--accept-server-license-terms'], {
         stdio: [process.stdin, process.stdout, process.stderr]
     });
 };
-run();
+/**
+ * only run action if module is called through Node
+ */
+if (nodePath === modulePath) {
+    run();
+}
 
 })();
 
