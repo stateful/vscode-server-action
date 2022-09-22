@@ -1,5 +1,4 @@
-import { spawn, exec } from 'node:child_process'
-import { promisify } from 'node:util'
+import { spawn } from 'node:child_process'
 
 import { getInput } from '@actions/core'
 
@@ -10,7 +9,17 @@ const run = async (): Promise<void> => {
     || `machine-${Date.now()}`
   ).slice(0, 20)
 
-  await promisify(exec)(`code-server --accept-server-license-terms rename --name ${machineId}`)
+  const child = spawn(
+    'code-server',
+    ['--accept-server-license-terms', 'rename', '--name', machineId],
+    { stdio: [process.stdin, process.stdout, process.stderr] }
+  )
+  await new Promise<void>((resolve, reject) => (
+    child.on('exit', (exit) => exit === 0
+      ? resolve()
+      : reject(new Error('Failed to set machine name')))
+  ))
+
   spawn('code-server', [], {
     stdio: [process.stdin, process.stdout, process.stderr]
   })

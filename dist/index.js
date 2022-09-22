@@ -2737,14 +2737,6 @@ module.exports = require("node:child_process");
 
 /***/ }),
 
-/***/ 261:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("node:util");
-
-/***/ }),
-
 /***/ 37:
 /***/ ((module) => {
 
@@ -2823,13 +2815,15 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const node_child_process_1 = __nccwpck_require__(718);
-const node_util_1 = __nccwpck_require__(261);
 const core_1 = __nccwpck_require__(186);
 const run = async () => {
     const machineId = ((0, core_1.getInput)('machineName')
         || process.env.GITHUB_RUN_ID
         || `machine-${Date.now()}`).slice(0, 20);
-    await (0, node_util_1.promisify)(node_child_process_1.exec)(`code-server --accept-server-license-terms rename --name ${machineId}`);
+    const child = (0, node_child_process_1.spawn)('code-server', ['--accept-server-license-terms', 'rename', '--name', machineId], { stdio: [process.stdin, process.stdout, process.stderr] });
+    await new Promise((resolve, reject) => (child.on('exit', (exit) => exit === 0
+        ? resolve()
+        : reject(new Error('Failed to set machine name')))));
     (0, node_child_process_1.spawn)('code-server', [], {
         stdio: [process.stdin, process.stdout, process.stderr]
     });
