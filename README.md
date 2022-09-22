@@ -42,7 +42,7 @@ You can also connect to it through your local VS Code application. Just open the
 - `machineName` (optional): name of the machine to access (default: GitHub Action run id)
 - `timeout` (optional): the time until the action continues the build if the machine does not get authorised (default: 30s)
 
-## Contrubting?
+## Contribute
 
-Simply raise a pull request :) Make sure CI passes and then you should be good to go.
+Simply raise a pull request 🙂 Make sure CI passes and then you should be good to go.
 
