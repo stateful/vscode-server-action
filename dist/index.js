@@ -2817,13 +2817,36 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const node_child_process_1 = __nccwpck_require__(718);
 const core_1 = __nccwpck_require__(186);
 const run = async () => {
+    /**
+     * name of the machine to access
+     */
     const machineId = ((0, core_1.getInput)('machineName')
         || process.env.GITHUB_RUN_ID
         || `machine-${Date.now()}`).slice(0, 20);
+    /**
+     * The time until the action continues the build of the machine
+     * does not get authorised
+     */
+    const timeout = (parseInt((0, core_1.getInput)('timeout'), 10)
+        || 30 * 1000 // default 30s
+    );
+    /**
+     * name the machine as an individual command so that we don't
+     * get prompt when launching the server
+     */
     const child = (0, node_child_process_1.spawn)('code-server', ['--accept-server-license-terms', 'rename', '--name', machineId], { stdio: [process.stdin, process.stdout, process.stderr] });
-    await new Promise((resolve, reject) => (child.on('exit', (exit) => exit === 0
-        ? resolve()
-        : reject(new Error('Failed to set machine name')))));
+    const startServer = await new Promise((resolve, reject) => {
+        const t = setTimeout(() => resolve(false), timeout);
+        child.on('exit', (exit) => {
+            clearTimeout(t);
+            return exit === 0
+                ? resolve(true)
+                : reject(new Error('Failed to set machine name'));
+        });
+    });
+    if (!startServer) {
+        return console.log('Timeout reached, continuing the build');
+    }
     (0, node_child_process_1.spawn)('code-server', ['--accept-server-license-terms'], {
         stdio: [process.stdin, process.stdout, process.stderr]
     });

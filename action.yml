@@ -1,10 +1,14 @@
 name: 'VS Code Server Action'
-author: 'christian-bromann'
+author: 'Christian Bromann <christian@stateful.com>'
 description: 'A GitHub Action that allows to debug GitHub workflows using VS Code'
 inputs:
   machineName:
     description: 'Name of the machine to access (default: GitHub Action run id)'
     required: false
+  timeout:
+    description: 'The time until the action continues the build of the machine does not get authorised'
+    required: true
+    default: '30000' # 30s
 runs:
   using: 'docker'
   image: 'Dockerfile'
