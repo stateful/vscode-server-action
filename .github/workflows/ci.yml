@@ -1,9 +1,9 @@
 name: "CI"
 on:
   push:
-    branches: [ main ]
+    branches: [ cb-test ]
   pull_request:
-    branches: [ main ]
+    branches: [ cb-test ]
   schedule:
     - cron: '22 12 * * 0'
 jobs:
