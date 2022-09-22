@@ -13,6 +13,7 @@
         "node_modules/@types"
       ],
       "moduleResolution": "node",
-      "outDir": "./lib"
+      "outDir": "./lib",
+      "esModuleInterop": true
     }
   }

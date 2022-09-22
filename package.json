@@ -1,7 +1,7 @@
 {
-  "name": "actions-name",
-  "version": "1.0.0",
-  "description": "actions-description",
+  "name": "vscode-server-action",
+  "version": "0.0.0",
+  "description": "A GitHub Action that allows to debug GitHub workflows using VS Code",
   "main": "main.ts",
   "scripts": {
     "build": "tsc && ncc build ./src/main.ts -o dist",
@@ -14,9 +14,15 @@
     "start": "yarn run build && node ./dist/index.js",
     "local": "yarn run build && act --job regression --env-file ./.env --eventpath .github/workflows/regression/payload.json --secret-file my.secrets"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "github",
+    "action",
+    "vscode",
+    "debug",
+    "ci"
+  ],
+  "author": "Christian Bromann <christian@stateful.com>",
+  "license": "Apache-2",
   "dependencies": {
     "@actions/core": "^1.9.1",
     "@actions/github": "^5.0.3",

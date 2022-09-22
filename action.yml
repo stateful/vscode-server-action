@@ -1,16 +1,13 @@
-name: 'Action Name'
-author: 'NickLiffen'
-description: 'Action Description'
+name: 'VS Code Server Action'
+author: 'christian-bromann'
+description: 'A GitHub Action that allows to debug GitHub workflows using VS Code'
 inputs:
-  inputName:
-    description: 'Input Description'
-    required: true
-outputs:
-  outputName:
-    description: 'Output Description'
+  machineName:
+    description: 'Name of the machine to access (default: GitHub Action run id)'
+    required: false
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: 'docker'
+  image: 'Dockerfile'
 branding:
   icon: 'target'  
   color: 'blue'
