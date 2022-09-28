@@ -22,7 +22,5 @@ jobs:
       run: npm run build
     - name: Test
       run: yarn run test
-    # To test the GitHub Action just uncommint this line and push
-    # the change to a branch
     - uses: ./
-      if: always()
+      if: failure()
