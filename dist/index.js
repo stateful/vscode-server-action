@@ -2883,7 +2883,8 @@ const run = async () => {
         });
     });
     if (!startServer) {
-        return console.log('Timeout reached, continuing the build');
+        console.log('Timeout reached, continuing the build');
+        return process.exit(0);
     }
     (0,external_node_child_process_namespaceObject.spawn)('code-server', ['--accept-server-license-terms'], {
         stdio: [process.stdin, process.stdout, process.stderr]
