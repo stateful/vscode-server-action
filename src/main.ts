@@ -49,7 +49,7 @@ export const run = async (): Promise<void> => {
 
   if (!startServer) {
     console.log('Timeout reached, continuing the build')
-    return process.exit(1)
+    return process.exit(0)
   }
 
   spawn('code-server', ['--accept-server-license-terms'], {
