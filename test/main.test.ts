@@ -31,7 +31,7 @@ test('start server if machine gets authorised', async () => {
   const execPromise = run()
   await execPromise
   expect(spawn).toBeCalledTimes(2)
-  expect(vi.mocked(spawn).mock.calls[1][0]).toBe('code-server')
+  expect(vi.mocked(spawn).mock.calls[1][0]).toBe('foobar')
   expect(vi.mocked(spawn).mock.calls[1][1].length).toBe(1)
 })
 
