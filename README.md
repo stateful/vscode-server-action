@@ -23,7 +23,7 @@ In your GitHub workflow add the following step at the end of all steps:
     timeout: '30000'       # optional, default: 30000
 ```
 
-In case your build fails the action attempt to start a VS Code Server on the build machine and requests you to authorise it:
+In case your build fails the action attempts to start a VS Code Server on the build machine and requests you to authorise it:
 
 ```
 To grant access to the server, please log into https://github.com/login/device and use code 0328-F81A
