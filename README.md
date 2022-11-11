@@ -6,7 +6,7 @@ Failing CI builds can be annoying especially since we don't have access to the m
 
 This GitHub Action helps to debug these problems by registering a VS Code Server instance on the CI machine that allows you to connect with the machine in case the build fails.
 
-![Connect VS Code to GitHub workflows](./.github/assets/demo.png "Connect VS Code to GitHub workflows")
+![Connect VS Code to GitHub workflows](./.github/assets/demo.gif "Connect VS Code to GitHub workflows")
 
 __Note:__ [VS Code Server](https://code.visualstudio.com/blogs/2022/07/07/vscode-server) is currently in private preview, you'll need to request access through a [signup form](https://aka.ms/vscode-server-signup).
 
