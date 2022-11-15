@@ -15,21 +15,32 @@ __Note:__ [VS Code Server](https://code.visualstudio.com/blogs/2022/07/07/vscode
 In your GitHub workflow add the following step at the end of all steps:
 
 ```yaml
-- name: 🐛 Debug Build
-  uses: stateful/vscode-server-action@v1
-  if: failure()
-  with:
-    machineName: myMachine # optional, default: GitHub workflow run ID
-    timeout: '30000'       # optional, default: 30000
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    # make sure these permissions are set so that
+    # VS Code can connect to the machine
+    permissions:
+      actions: read
+      contents: read
+    steps:
+    # ...
+    - name: 🐛 Debug Build
+      uses: stateful/vscode-server-action@v1
+      if: failure()
+      with:
+        machineName: myMachine # optional, default: GitHub workflow run ID
+        timeout: '30000'       # optional, default: 30000
 ```
 
-In case your build fails the action attempts to start a VS Code Server on the build machine and requests you to authorise it:
+In case your build fails the action attempts to start a VS Code Server on the build machine and requests you to authorize it:
 
 ```
 To grant access to the server, please log into https://github.com/login/device and use code 0328-F81A
 ```
 
-If you don't authorise the machine until the `timeout` was hit the build just continues. Once authorised though a VS Code Server is started and it prints an url to connect to, e.g.:
+If you don't authorize the machine until the `timeout` was hit the build just continues. Once authorized through a VS Code Server is started and it prints an URL to connect to, e.g.:
 
 ```
 Open this link in your browser https://insiders.vscode.dev/+ms-vscode.remote-server/myMachine/github/workspace
@@ -40,7 +51,7 @@ You can also connect to it through your local VS Code application. Just open the
 ## Inputs
 
 - `machineName` (optional): name of the machine to access (default: GitHub Action run id)
-- `timeout` (optional): the time until the action continues the build if the machine does not get authorised (default: 30s)
+- `timeout` (optional): the time until the action continues the build if the machine does not get authorized (default: 30s)
 
 ## Contribute
 
