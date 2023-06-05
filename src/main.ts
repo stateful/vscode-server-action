@@ -1,4 +1,5 @@
-import { resolve } from 'node:path'
+import { resolve, dirname } from 'node:path'
+import { platform } from 'node:os'
 import { spawn } from 'node:child_process'
 
 import { download } from '@vscode/test-electron'
@@ -29,8 +30,12 @@ export const run = async (): Promise<void> => {
   /**
    * download latest VS Code
    */
-  const electronPath = await download({ version: 'stable' })
-  const codePath = resolve(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
+  const electronPath = await download({ version: 'stable', platform: 'win32-archive' })
+  const codePath = platform() === 'darwin'
+    ? resolve(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
+    : platform() === 'win32'
+      ? resolve(dirname(electronPath), 'bin', 'code.cmd')
+      : electronPath
 
   /**
    * name the machine as an individual command so that we don't

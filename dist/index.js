@@ -23866,6 +23866,8 @@ __nccwpck_require__.d(__webpack_exports__, {
 
 ;// CONCATENATED MODULE: external "node:path"
 const external_node_path_namespaceObject = require("node:path");
+;// CONCATENATED MODULE: external "node:os"
+const external_node_os_namespaceObject = require("node:os");
 ;// CONCATENATED MODULE: external "node:child_process"
 const external_node_child_process_namespaceObject = require("node:child_process");
 // EXTERNAL MODULE: ./node_modules/@vscode/test-electron/out/index.js
@@ -23873,6 +23875,7 @@ var out = __nccwpck_require__(5140);
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2186);
 ;// CONCATENATED MODULE: ./src/main.ts
+
 
 
 
@@ -23895,8 +23898,12 @@ const run = async () => {
     /**
      * download latest VS Code
      */
-    const electronPath = await (0,out.download)({ version: 'stable' });
-    const codePath = (0,external_node_path_namespaceObject.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code');
+    const electronPath = await (0,out.download)({ version: 'stable', platform: 'win32-archive' });
+    const codePath = (0,external_node_os_namespaceObject.platform)() === 'darwin'
+        ? (0,external_node_path_namespaceObject.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
+        : (0,external_node_os_namespaceObject.platform)() === 'win32'
+            ? (0,external_node_path_namespaceObject.resolve)((0,external_node_path_namespaceObject.dirname)(electronPath), 'bin', 'code.cmd')
+            : electronPath;
     /**
      * name the machine as an individual command so that we don't
      * get prompt when launching the server
