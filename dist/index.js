@@ -23882,12 +23882,14 @@ var core = __nccwpck_require__(2186);
 
 const nodePath = (0,external_node_path_namespaceObject.resolve)(process.argv[1]);
 const run = async () => {
+    console.log('LETS GO');
     /**
      * name of the machine to access
      */
     const machineId = ((0,core.getInput)('machineName')
         || process.env.GITHUB_RUN_ID
         || `machine-${Date.now()}`).slice(0, 20);
+    console.log('LETS GO', 1);
     /**
      * The time until the action continues the build of the machine
      * does not get authorised
@@ -23895,15 +23897,18 @@ const run = async () => {
     const timeout = (parseInt((0,core.getInput)('timeout'), 10)
         || 30 * 1000 // default 30s
     );
+    console.log('LETS GO', 2);
     /**
      * download latest VS Code
      */
     const electronPath = await (0,out.download)({ version: 'stable' });
+    console.log('LETS GO', 3);
     const codePath = (0,external_node_os_namespaceObject.platform)() === 'darwin'
         ? (0,external_node_path_namespaceObject.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
         : (0,external_node_os_namespaceObject.platform)() === 'win32'
             ? (0,external_node_path_namespaceObject.resolve)((0,external_node_path_namespaceObject.dirname)(electronPath), 'bin', 'code.cmd')
             : (0,external_node_path_namespaceObject.resolve)((0,external_node_path_namespaceObject.dirname)(electronPath), 'bin', 'code');
+    console.log('LETS GO', 4);
     /**
      * name the machine as an individual command so that we don't
      * get prompt when launching the server
