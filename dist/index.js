@@ -23658,6 +23658,88 @@ try {
 
 /***/ }),
 
+/***/ 399:
+/***/ ((module, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+__nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   "run": () => (/* binding */ run)
+/* harmony export */ });
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(9411);
+/* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(node_path__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(612);
+/* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(node_os__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(7718);
+/* harmony import */ var node_child_process__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(node_child_process__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _vscode_test_electron__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(5140);
+/* harmony import */ var _vscode_test_electron__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(_vscode_test_electron__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(2186);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+const nodePath = (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(process.argv[1]);
+const run = async () => {
+    /**
+     * name of the machine to access
+     */
+    const machineId = ((0,_actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput)('machineName')
+        || process.env.GITHUB_RUN_ID
+        || `machine-${Date.now()}`).slice(0, 20);
+    /**
+     * The time until the action continues the build of the machine
+     * does not get authorised
+     */
+    const timeout = (parseInt((0,_actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput)('timeout'), 10)
+        || 30 * 1000 // default 30s
+    );
+    /**
+     * download latest VS Code
+     */
+    const electronPath = await (0,_vscode_test_electron__WEBPACK_IMPORTED_MODULE_3__.download)({ version: 'stable' });
+    const codePath = (0,node_os__WEBPACK_IMPORTED_MODULE_1__.platform)() === 'darwin'
+        ? (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
+        : (0,node_os__WEBPACK_IMPORTED_MODULE_1__.platform)() === 'win32'
+            ? (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.dirname)(electronPath), 'bin', 'code.cmd')
+            : (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.dirname)(electronPath), 'bin', 'code');
+    /**
+     * name the machine as an individual command so that we don't
+     * get prompt when launching the server
+     */
+    const child = (0,node_child_process__WEBPACK_IMPORTED_MODULE_2__.spawn)(codePath, ['tunnel', '--accept-server-license-terms', 'rename', machineId], { stdio: [process.stdin, process.stdout, process.stderr] });
+    const startServer = await new Promise((resolve, reject) => {
+        const t = setTimeout(() => resolve(false), timeout);
+        child.on('exit', (exit) => {
+            clearTimeout(t);
+            return exit === 0
+                ? resolve(true)
+                : reject(new Error('Failed to set machine name'));
+        });
+    });
+    if (!startServer) {
+        console.log('Timeout reached, continuing the build');
+        return process.exit(0);
+    }
+    (0,node_child_process__WEBPACK_IMPORTED_MODULE_2__.spawn)(codePath, ['tunnel', '--accept-server-license-terms'], {
+        stdio: [process.stdin, process.stdout, process.stderr]
+    });
+};
+/**
+ * only run action if module is called through Node
+ */
+if (nodePath.endsWith('index.js')) {
+    await run();
+}
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } }, 1);
+
+/***/ }),
+
 /***/ 9491:
 /***/ ((module) => {
 
@@ -23727,6 +23809,30 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
+
+/***/ }),
+
+/***/ 7718:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:child_process");
+
+/***/ }),
+
+/***/ 612:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:os");
+
+/***/ }),
+
+/***/ 9411:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:path");
 
 /***/ }),
 
@@ -23819,6 +23925,87 @@ module.exports = require("util");
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/async module */
+/******/ 	(() => {
+/******/ 		var webpackQueues = typeof Symbol === "function" ? Symbol("webpack queues") : "__webpack_queues__";
+/******/ 		var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
+/******/ 		var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
+/******/ 		var resolveQueue = (queue) => {
+/******/ 			if(queue && !queue.d) {
+/******/ 				queue.d = 1;
+/******/ 				queue.forEach((fn) => (fn.r--));
+/******/ 				queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
+/******/ 			}
+/******/ 		}
+/******/ 		var wrapDeps = (deps) => (deps.map((dep) => {
+/******/ 			if(dep !== null && typeof dep === "object") {
+/******/ 				if(dep[webpackQueues]) return dep;
+/******/ 				if(dep.then) {
+/******/ 					var queue = [];
+/******/ 					queue.d = 0;
+/******/ 					dep.then((r) => {
+/******/ 						obj[webpackExports] = r;
+/******/ 						resolveQueue(queue);
+/******/ 					}, (e) => {
+/******/ 						obj[webpackError] = e;
+/******/ 						resolveQueue(queue);
+/******/ 					});
+/******/ 					var obj = {};
+/******/ 					obj[webpackQueues] = (fn) => (fn(queue));
+/******/ 					return obj;
+/******/ 				}
+/******/ 			}
+/******/ 			var ret = {};
+/******/ 			ret[webpackQueues] = x => {};
+/******/ 			ret[webpackExports] = dep;
+/******/ 			return ret;
+/******/ 		}));
+/******/ 		__nccwpck_require__.a = (module, body, hasAwait) => {
+/******/ 			var queue;
+/******/ 			hasAwait && ((queue = []).d = 1);
+/******/ 			var depQueues = new Set();
+/******/ 			var exports = module.exports;
+/******/ 			var currentDeps;
+/******/ 			var outerResolve;
+/******/ 			var reject;
+/******/ 			var promise = new Promise((resolve, rej) => {
+/******/ 				reject = rej;
+/******/ 				outerResolve = resolve;
+/******/ 			});
+/******/ 			promise[webpackExports] = exports;
+/******/ 			promise[webpackQueues] = (fn) => (queue && fn(queue), depQueues.forEach(fn), promise["catch"](x => {}));
+/******/ 			module.exports = promise;
+/******/ 			body((deps) => {
+/******/ 				currentDeps = wrapDeps(deps);
+/******/ 				var fn;
+/******/ 				var getResult = () => (currentDeps.map((d) => {
+/******/ 					if(d[webpackError]) throw d[webpackError];
+/******/ 					return d[webpackExports];
+/******/ 				}))
+/******/ 				var promise = new Promise((resolve) => {
+/******/ 					fn = () => (resolve(getResult));
+/******/ 					fn.r = 0;
+/******/ 					var fnQueue = (q) => (q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))));
+/******/ 					currentDeps.map((dep) => (dep[webpackQueues](fnQueue)));
+/******/ 				});
+/******/ 				return fn.r ? promise : getResult();
+/******/ 			}, (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue)));
+/******/ 			queue && (queue.d = 0);
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -23852,89 +24039,12 @@ module.exports = require("util");
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-// ESM COMPAT FLAG
-__nccwpck_require__.r(__webpack_exports__);
-
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  "run": () => (/* binding */ run)
-});
-
-;// CONCATENATED MODULE: external "node:path"
-const external_node_path_namespaceObject = require("node:path");
-;// CONCATENATED MODULE: external "node:os"
-const external_node_os_namespaceObject = require("node:os");
-;// CONCATENATED MODULE: external "node:child_process"
-const external_node_child_process_namespaceObject = require("node:child_process");
-// EXTERNAL MODULE: ./node_modules/@vscode/test-electron/out/index.js
-var out = __nccwpck_require__(5140);
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(2186);
-;// CONCATENATED MODULE: ./src/main.ts
-
-
-
-
-
-const nodePath = (0,external_node_path_namespaceObject.resolve)(process.argv[1]);
-const run = async () => {
-    /**
-     * name of the machine to access
-     */
-    const machineId = ((0,core.getInput)('machineName')
-        || process.env.GITHUB_RUN_ID
-        || `machine-${Date.now()}`).slice(0, 20);
-    /**
-     * The time until the action continues the build of the machine
-     * does not get authorised
-     */
-    const timeout = (parseInt((0,core.getInput)('timeout'), 10)
-        || 30 * 1000 // default 30s
-    );
-    /**
-     * download latest VS Code
-     */
-    const electronPath = await (0,out.download)({ version: 'stable' });
-    const codePath = (0,external_node_os_namespaceObject.platform)() === 'darwin'
-        ? (0,external_node_path_namespaceObject.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
-        : (0,external_node_os_namespaceObject.platform)() === 'win32'
-            ? (0,external_node_path_namespaceObject.resolve)((0,external_node_path_namespaceObject.dirname)(electronPath), 'bin', 'code.cmd')
-            : (0,external_node_path_namespaceObject.resolve)((0,external_node_path_namespaceObject.dirname)(electronPath), 'bin', 'code');
-    /**
-     * name the machine as an individual command so that we don't
-     * get prompt when launching the server
-     */
-    const child = (0,external_node_child_process_namespaceObject.spawn)(codePath, ['tunnel', '--accept-server-license-terms', 'rename', machineId], { stdio: [process.stdin, process.stdout, process.stderr] });
-    const startServer = await new Promise((resolve, reject) => {
-        const t = setTimeout(() => resolve(false), timeout);
-        child.on('exit', (exit) => {
-            clearTimeout(t);
-            return exit === 0
-                ? resolve(true)
-                : reject(new Error('Failed to set machine name'));
-        });
-    });
-    if (!startServer) {
-        console.log('Timeout reached, continuing the build');
-        return process.exit(0);
-    }
-    (0,external_node_child_process_namespaceObject.spawn)(codePath, ['tunnel', '--accept-server-license-terms'], {
-        stdio: [process.stdin, process.stdout, process.stderr]
-    });
-};
-/**
- * only run action if module is called through Node
- */
-if (nodePath.endsWith('index.js')) {
-    run();
-}
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module used 'module' so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(399);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;

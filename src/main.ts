@@ -71,5 +71,5 @@ export const run = async (): Promise<void> => {
  * only run action if module is called through Node
  */
 if (nodePath.endsWith('index.js')) {
-  run()
+  await run()
 }
