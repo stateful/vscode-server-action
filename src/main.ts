@@ -1,9 +1,11 @@
-import { resolve } from 'path';
+import { resolve } from 'node:path'
 import { spawn } from 'node:child_process'
+
+import { download } from '@vscode/test-electron'
 
 import { getInput } from '@actions/core'
 
-const nodePath = resolve(process.argv[1]);
+const nodePath = resolve(process.argv[1])
 
 export const run = async (): Promise<void> => {
   /**
@@ -25,12 +27,18 @@ export const run = async (): Promise<void> => {
   )
 
   /**
+   * download latest VS Code
+   */
+  const electronPath = await download({ version: 'stable' })
+  const codePath = resolve(electronPath, '..', 'Resources', 'app', 'bin', 'code')
+
+  /**
    * name the machine as an individual command so that we don't
    * get prompt when launching the server
    */
   const child = spawn(
-    'code-server',
-    ['--accept-server-license-terms', 'rename', '--name', machineId],
+    codePath,
+    ['tunnel', '--accept-server-license-terms', 'rename', '--name', machineId],
     { stdio: [process.stdin, process.stdout, process.stderr] }
   )
 
@@ -50,7 +58,7 @@ export const run = async (): Promise<void> => {
     return process.exit(0)
   }
 
-  spawn('code-server', ['--accept-server-license-terms'], {
+  spawn(codePath, ['tunnel', '--accept-server-license-terms'], {
     stdio: [process.stdin, process.stdout, process.stderr]
   })
 }

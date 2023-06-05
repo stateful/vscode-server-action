@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     permissions:
       actions: read
       contents: read
@@ -21,6 +21,6 @@ jobs:
     - name: Build
       run: npm run build
     - name: Test
-      run: which code
+      run: yarn test
     - uses: ./
       if: failure()
