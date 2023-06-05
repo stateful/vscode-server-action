@@ -42,7 +42,7 @@ export const run = async (): Promise<void> => {
    */
   const child = spawn(
     codePath,
-    ['tunnel', '--accept-server-license-terms', 'rename', '--name', machineId],
+    ['tunnel', '--accept-server-license-terms', 'rename', machineId],
     { stdio: [process.stdin, process.stdout, process.stderr] }
   )
 

@@ -23908,7 +23908,7 @@ const run = async () => {
      * name the machine as an individual command so that we don't
      * get prompt when launching the server
      */
-    const child = (0,external_node_child_process_namespaceObject.spawn)(codePath, ['tunnel', '--accept-server-license-terms', 'rename', '--name', machineId], { stdio: [process.stdin, process.stdout, process.stderr] });
+    const child = (0,external_node_child_process_namespaceObject.spawn)(codePath, ['tunnel', '--accept-server-license-terms', 'rename', machineId], { stdio: [process.stdin, process.stdout, process.stderr] });
     const startServer = await new Promise((resolve, reject) => {
         const t = setTimeout(() => resolve(false), timeout);
         child.on('exit', (exit) => {
