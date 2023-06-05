@@ -71,7 +71,6 @@ export const run = async (): Promise<void> => {
 /**
  * only run action if module is called through Node
  */
-console.log(nodePath)
-if (nodePath.endsWith('dist/index.js')) {
+if (nodePath.endsWith('index.js')) {
   run()
 }

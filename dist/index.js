@@ -23929,8 +23929,7 @@ const run = async () => {
 /**
  * only run action if module is called through Node
  */
-console.log(nodePath);
-if (nodePath.endsWith('dist/index.js')) {
+if (nodePath.endsWith('index.js')) {
     run();
 }
 
