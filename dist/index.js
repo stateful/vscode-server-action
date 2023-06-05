@@ -2856,8 +2856,6 @@ __nccwpck_require__.d(__webpack_exports__, {
 
 // EXTERNAL MODULE: external "path"
 var external_path_ = __nccwpck_require__(17);
-;// CONCATENATED MODULE: external "url"
-const external_url_namespaceObject = require("url");
 ;// CONCATENATED MODULE: external "node:child_process"
 const external_node_child_process_namespaceObject = require("node:child_process");
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
@@ -2866,9 +2864,7 @@ var core = __nccwpck_require__(186);
 
 
 
-
 const nodePath = (0,external_path_.resolve)(process.argv[1]);
-const modulePath = (0,external_path_.resolve)((0,external_url_namespaceObject.fileURLToPath)(import.meta.url));
 const run = async () => {
     /**
      * name of the machine to access
