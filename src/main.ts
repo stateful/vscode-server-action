@@ -30,7 +30,7 @@ export const run = async (): Promise<void> => {
    * download latest VS Code
    */
   const electronPath = await download({ version: 'stable' })
-  const codePath = resolve(electronPath, '..', 'Resources', 'app', 'bin', 'code')
+  const codePath = resolve(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
 
   /**
    * name the machine as an individual command so that we don't

@@ -23896,7 +23896,7 @@ const run = async () => {
      * download latest VS Code
      */
     const electronPath = await (0,out.download)({ version: 'stable' });
-    const codePath = (0,external_node_path_namespaceObject.resolve)(electronPath, '..', 'Resources', 'app', 'bin', 'code');
+    const codePath = (0,external_node_path_namespaceObject.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code');
     /**
      * name the machine as an individual command so that we don't
      * get prompt when launching the server
