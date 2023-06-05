@@ -10,8 +10,8 @@ inputs:
     required: true
     default: '30000' # 30s
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node16'
+  main: 'dist/index.js'
 branding:
-  icon: 'box'  
+  icon: 'box'
   color: 'purple'
