@@ -9,8 +9,6 @@ import { getInput } from '@actions/core'
 const nodePath = resolve(process.argv[1])
 
 export const run = async (): Promise<void> => {
-  console.log('LETS GO')
-
   /**
    * name of the machine to access
    */
@@ -19,7 +17,6 @@ export const run = async (): Promise<void> => {
     || process.env.GITHUB_RUN_ID
     || `machine-${Date.now()}`
   ).slice(0, 20)
-  console.log('LETS GO', 1)
 
   /**
    * The time until the action continues the build of the machine
@@ -30,18 +27,16 @@ export const run = async (): Promise<void> => {
     || 30 * 1000 // default 30s
   )
 
-  console.log('LETS GO', 2)
   /**
    * download latest VS Code
    */
   const electronPath = await download({ version: 'stable' })
-  console.log('LETS GO', 3)
   const codePath = platform() === 'darwin'
     ? resolve(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
     : platform() === 'win32'
       ? resolve(dirname(electronPath), 'bin', 'code.cmd')
       : resolve(dirname(electronPath), 'bin', 'code')
-  console.log('LETS GO', 4)
+
   /**
    * name the machine as an individual command so that we don't
    * get prompt when launching the server
@@ -76,6 +71,7 @@ export const run = async (): Promise<void> => {
 /**
  * only run action if module is called through Node
  */
+console.log(nodePath)
 if (nodePath.endsWith('dist/index.js')) {
   run()
 }
