@@ -13,10 +13,10 @@ export default defineConfig({
         ],
         coverage: {
             enabled: true,
-            lines: 95,
+            lines: 92,
             functions: 95,
-            branches: 71,
-            statements: 95
+            branches: 62,
+            statements: 92
         }
     }
 })

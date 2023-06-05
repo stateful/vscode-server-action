@@ -3,7 +3,6 @@ import { platform } from 'node:os'
 import { spawn } from 'node:child_process'
 
 import { download } from '@vscode/test-electron'
-
 import { getInput } from '@actions/core'
 
 const nodePath = resolve(process.argv[1])
