@@ -8,8 +8,6 @@ This GitHub Action helps to debug these problems by registering a VS Code Server
 
 ![Connect VS Code to GitHub workflows](./.github/assets/demo.gif "Connect VS Code to GitHub workflows")
 
-__Note:__ [VS Code Server](https://code.visualstudio.com/blogs/2022/07/07/vscode-server) is currently in private preview, you'll need to request access through a [signup form](https://aka.ms/vscode-server-signup).
-
 ## Usage
 
 In your GitHub workflow add the following step at the end of all steps:
@@ -43,7 +41,7 @@ To grant access to the server, please log into https://github.com/login/device a
 If you don't authorize the machine until the `timeout` was hit the build just continues. Once authorized through a VS Code Server is started and it prints an URL to connect to, e.g.:
 
 ```
-Open this link in your browser https://insiders.vscode.dev/+ms-vscode.remote-server/myMachine/github/workspace
+Open this link in your browser  https://vscode.dev/tunnel/myMachine/github/workspace
 ```
 
 You can also connect to it through your local VS Code application. Just open the URL, open the command palette and enter `Open in VS Code`.
