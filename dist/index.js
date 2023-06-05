@@ -23898,7 +23898,7 @@ const run = async () => {
     /**
      * download latest VS Code
      */
-    const electronPath = await (0,out.download)({ version: 'stable', platform: 'win32-archive' });
+    const electronPath = await (0,out.download)({ version: 'stable' });
     const codePath = (0,external_node_os_namespaceObject.platform)() === 'darwin'
         ? (0,external_node_path_namespaceObject.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
         : (0,external_node_os_namespaceObject.platform)() === 'win32'

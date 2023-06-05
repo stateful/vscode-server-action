@@ -30,7 +30,7 @@ export const run = async (): Promise<void> => {
   /**
    * download latest VS Code
    */
-  const electronPath = await download({ version: 'stable', platform: 'win32-archive' })
+  const electronPath = await download({ version: 'stable' })
   const codePath = platform() === 'darwin'
     ? resolve(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
     : platform() === 'win32'
