@@ -35,7 +35,7 @@ export const run = async (): Promise<void> => {
     ? resolve(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
     : platform() === 'win32'
       ? resolve(dirname(electronPath), 'bin', 'code.cmd')
-      : electronPath
+      : resolve(dirname(electronPath), 'bin', 'code')
 
   /**
    * name the machine as an individual command so that we don't

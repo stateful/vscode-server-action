@@ -23903,7 +23903,7 @@ const run = async () => {
         ? (0,external_node_path_namespaceObject.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
         : (0,external_node_os_namespaceObject.platform)() === 'win32'
             ? (0,external_node_path_namespaceObject.resolve)((0,external_node_path_namespaceObject.dirname)(electronPath), 'bin', 'code.cmd')
-            : electronPath;
+            : (0,external_node_path_namespaceObject.resolve)((0,external_node_path_namespaceObject.dirname)(electronPath), 'bin', 'code');
     /**
      * name the machine as an individual command so that we don't
      * get prompt when launching the server
