@@ -35,7 +35,7 @@
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
     "@vitest/coverage-c8": "^0.31.4",
-    "c8": "^7.14.0",
+    "c8": "^8.0.0",
     "eslint": "^8.42.0",
     "eslint-plugin-jest": "^27.2.1",
     "husky": "^8.0.3",
