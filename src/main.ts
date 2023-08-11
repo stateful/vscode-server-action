@@ -1,6 +1,6 @@
 import { resolve, dirname } from 'node:path'
 import { platform } from 'node:os'
-import { spawn } from 'node:child_process'
+import { execa } from 'execa'
 
 import { download } from '@vscode/test-electron'
 import { getInput } from '@actions/core'
@@ -40,29 +40,24 @@ export const run = async (): Promise<void> => {
    * name the machine as an individual command so that we don't
    * get prompt when launching the server
    */
-  const child = spawn(
-    codePath,
-    ['tunnel', '--accept-server-license-terms', 'rename', machineId],
-    { stdio: [process.stdin, process.stdout, process.stderr] }
-  )
+  console.log('RUN', codePath, ['tunnel', '--accept-server-license-terms', 'rename', machineId].join(' '));
+  await execa(codePath, ['--help'])
+  const startServer = await Promise.race([
+    new Promise((resolve) => setTimeout(() => resolve(false), timeout)),
+    execa(
+      codePath,
+      ['tunnel', '--accept-server-license-terms', 'rename', machineId]
+    ).then(() => true)
+  ])
 
-  const startServer = await new Promise<boolean>((resolve, reject) => {
-    const t = setTimeout(() => resolve(false), timeout)
-
-    child.on('exit', (exit) => {
-      clearTimeout(t)
-      return exit === 0
-        ? resolve(true)
-        : reject(new Error('Failed to set machine name'))
-    })
-  })
-
+  console.log(5)
   if (!startServer) {
     console.log('Timeout reached, continuing the build')
     return process.exit(0)
   }
 
-  spawn(codePath, ['tunnel', '--accept-server-license-terms'], {
+  console.log(6)
+  await execa(codePath, ['tunnel', '--accept-server-license-terms'], {
     stdio: [process.stdin, process.stdout, process.stderr]
   })
 }

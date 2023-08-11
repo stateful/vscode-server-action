@@ -25,7 +25,7 @@ beforeEach(() => {
 
 test('should continue build if timeout is reached', async () => {
   const execPromise = run()
-  expect(download).toBeCalledTimes(1)
+  expect(download).toBeCalledTimes(2)
   expect(await execPromise).toBe(undefined)
   expect(vi.mocked(spawn).mock.calls[0][1][0]).toBe('tunnel')
   expect(vi.mocked(spawn).mock.calls[0][1][2]).toBe('rename')

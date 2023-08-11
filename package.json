@@ -26,7 +26,8 @@
     "@actions/github": "^5.1.1",
     "@octokit/action": "^6.0.4",
     "@vercel/ncc": "^0.36.1",
-    "@vscode/test-electron": "^2.3.3"
+    "@vscode/test-electron": "^2.3.3",
+    "execa": "^7.2.0"
   },
   "devDependencies": {
     "@tsconfig/node16": "^16.1.0",
