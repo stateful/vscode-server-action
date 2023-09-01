@@ -24,7 +24,7 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/github": "^5.1.1",
-    "@octokit/action": "^6.0.4",
+    "@octokit/action": "^6.0.5",
     "@vercel/ncc": "^0.36.1",
     "@vscode/test-electron": "^2.3.3",
     "execa": "^7.2.0"
