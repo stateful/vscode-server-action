@@ -30,6 +30,9 @@ jobs:
       with:
         machineName: myMachine # optional, default: GitHub workflow run ID
         timeout: '30000'       # optional, default: 30000
+        installExtensions: |
+          ms-python.python
+
 ```
 
 In case your build fails the action attempts to start a VS Code Server on the build machine and requests you to authorize it:
@@ -50,6 +53,11 @@ You can also connect to it through your local VS Code application. Just open the
 
 - `machineName` (optional): name of the machine to access (default: GitHub Action run id)
 - `timeout` (optional): the time until the action continues the build if the machine does not get authorized (default: 30s)
+- `installExtensions` (optional): a newline-separated list of extensions to install on the server (default: empty)
+
+For extensions use the [VS Code Marketplace](https://marketplace.visualstudio.com/vscode) identifier, e.g. `ms-python.python` for the Python extension.
+
+You can also pin versions as described [here](https://code.visualstudio.com/docs/configure/command-line#_working-with-extensions).
 
 ## Contribute
 

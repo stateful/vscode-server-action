@@ -40,13 +40,27 @@ export const run = async (): Promise<void> => {
    * name the machine as an individual command so that we don't
    * get prompt when launching the server
    */
-  console.log('RUN', codePath, ['tunnel', '--accept-server-license-terms', 'rename', machineId].join(' '));
+  const installExtensions = getInput('installExtensions')
+  const extensionsList = installExtensions.split(/\r?\n/).filter(Boolean)
+  const extensionsArgs = extensionsList.map((extension) => ['--install-extension', extension]).flat()
+  const forceInstallExtensionArg = extensionsList.length > 0 ? ['--force'] : []
+
+  const execArgs = [
+    'tunnel',
+    '--accept-server-license-terms',
+    ...extensionsArgs,
+    ...forceInstallExtensionArg,
+    'rename',
+    machineId,
+  ]
+
+  console.log('RUN', codePath, execArgs.join(' '));
   await execa(codePath, ['--help'])
   const startServer = await Promise.race([
     new Promise((resolve) => setTimeout(() => resolve(false), timeout)),
     execa(
       codePath,
-      ['tunnel', '--accept-server-license-terms', 'rename', machineId]
+      execArgs
     ).then(() => true)
   ])
 

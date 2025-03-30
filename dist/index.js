@@ -24946,11 +24946,23 @@ const run = async () => {
      * name the machine as an individual command so that we don't
      * get prompt when launching the server
      */
-    console.log('RUN', codePath, ['tunnel', '--accept-server-license-terms', 'rename', machineId].join(' '));
+    const installExtensions = (0,_actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput)('installExtensions');
+    const extensionsList = installExtensions.split(/\r?\n/).filter(Boolean);
+    const extensionsArgs = extensionsList.map((extension) => ['--install-extension', extension]).flat();
+    const forceInstallExtensionArg = extensionsList.length > 0 ? ['--force'] : [];
+    const execArgs = [
+        'tunnel',
+        '--accept-server-license-terms',
+        ...extensionsArgs,
+        ...forceInstallExtensionArg,
+        'rename',
+        machineId,
+    ];
+    console.log('RUN', codePath, execArgs.join(' '));
     await (0,execa__WEBPACK_IMPORTED_MODULE_2__/* .execa */ .r)(codePath, ['--help']);
     const startServer = await Promise.race([
         new Promise((resolve) => setTimeout(() => resolve(false), timeout)),
-        (0,execa__WEBPACK_IMPORTED_MODULE_2__/* .execa */ .r)(codePath, ['tunnel', '--accept-server-license-terms', 'rename', machineId]).then(() => true)
+        (0,execa__WEBPACK_IMPORTED_MODULE_2__/* .execa */ .r)(codePath, execArgs).then(() => true)
     ]);
     console.log(5);
     if (!startServer) {

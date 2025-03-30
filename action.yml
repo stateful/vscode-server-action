@@ -9,6 +9,9 @@ inputs:
     description: 'The time until the action continues the build of the machine does not get authorised'
     required: true
     default: '30000' # 30s
+  installExtensions:
+    description: 'A newline-separated list of extensions to install. Use the syntax for the extensions described here: https://code.visualstudio.com/docs/configure/command-line#_working-with-extensions'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
