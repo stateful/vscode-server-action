@@ -24908,58 +24908,101 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var node_path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(node_path__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(612);
 /* harmony import */ var node_os__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(node_os__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var execa__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(4626);
-/* harmony import */ var _vscode_test_electron__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(5140);
-/* harmony import */ var _vscode_test_electron__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(_vscode_test_electron__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(2186);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(7561);
+/* harmony import */ var node_fs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(node_fs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var execa__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(619);
+/* harmony import */ var _vscode_test_electron__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(5140);
+/* harmony import */ var _vscode_test_electron__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(_vscode_test_electron__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_5__ = __nccwpck_require__(2186);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
 
 
 const nodePath = (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(process.argv[1]);
+const getMachineId = () => {
+    const rawMachineId = ((0,_actions_core__WEBPACK_IMPORTED_MODULE_5__.getInput)('machineName')
+        || process.env.GITHUB_RUN_ID
+        || `machine-${Date.now()}`);
+    const machineId = rawMachineId
+        .replace(/[^a-zA-Z0-9._-]/g, '-')
+        .slice(0, 20);
+    return machineId || `machine-${Date.now()}`.slice(0, 20);
+};
+const getExistingPath = (...candidates) => (candidates.find((candidate) => (0,node_fs__WEBPACK_IMPORTED_MODULE_2__.existsSync)(candidate)) || candidates[0]);
+const ensureExecutable = (filePath) => {
+    try {
+        (0,node_fs__WEBPACK_IMPORTED_MODULE_2__.accessSync)(filePath, node_fs__WEBPACK_IMPORTED_MODULE_2__.constants.X_OK);
+        return;
+    }
+    catch {
+        // Continue to chmod below.
+    }
+    try {
+        (0,node_fs__WEBPACK_IMPORTED_MODULE_2__.chmodSync)(filePath, 0o755);
+    }
+    catch (error) {
+        console.warn(`Unable to update executable permissions for ${filePath}`, error);
+    }
+};
+const getTunnelCommand = (electronPath) => {
+    const currentPlatform = (0,node_os__WEBPACK_IMPORTED_MODULE_1__.platform)();
+    if (currentPlatform === 'darwin') {
+        return {
+            command: getExistingPath((0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code'), (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(electronPath, '..', '..', '..', '..', 'Contents', 'Resources', 'app', 'bin', 'code')),
+            args: ['tunnel'],
+            executable: true
+        };
+    }
+    if (currentPlatform === 'win32') {
+        return {
+            command: getExistingPath((0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.dirname)(electronPath), 'code-tunnel.exe'), (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.dirname)(electronPath), 'bin', 'code-tunnel.exe')),
+            args: ['tunnel'],
+            executable: false
+        };
+    }
+    return {
+        command: (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.dirname)(electronPath), 'bin', 'code'),
+        args: ['tunnel'],
+        executable: true
+    };
+};
 const run = async () => {
     /**
      * name of the machine to access
      */
-    const machineId = ((0,_actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput)('machineName')
-        || process.env.GITHUB_RUN_ID
-        || `machine-${Date.now()}`).slice(0, 20);
+    const machineId = getMachineId();
     /**
      * The time until the action continues the build of the machine
      * does not get authorised
      */
-    const timeout = (parseInt((0,_actions_core__WEBPACK_IMPORTED_MODULE_4__.getInput)('timeout'), 10)
+    const timeout = (parseInt((0,_actions_core__WEBPACK_IMPORTED_MODULE_5__.getInput)('timeout'), 10)
         || 30 * 1000 // default 30s
     );
     /**
      * download latest VS Code
      */
-    const electronPath = await (0,_vscode_test_electron__WEBPACK_IMPORTED_MODULE_3__.download)({ version: 'stable' });
-    const codePath = (0,node_os__WEBPACK_IMPORTED_MODULE_1__.platform)() === 'darwin'
-        ? (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)(electronPath, '..', '..', 'Resources', 'app', 'bin', 'code')
-        : (0,node_os__WEBPACK_IMPORTED_MODULE_1__.platform)() === 'win32'
-            ? (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.dirname)(electronPath), 'bin', 'code.cmd')
-            : (0,node_path__WEBPACK_IMPORTED_MODULE_0__.resolve)((0,node_path__WEBPACK_IMPORTED_MODULE_0__.dirname)(electronPath), 'bin', 'code');
+    const electronPath = await (0,_vscode_test_electron__WEBPACK_IMPORTED_MODULE_4__.download)({ version: 'stable' });
+    const tunnelCommand = getTunnelCommand(electronPath);
+    if (tunnelCommand.executable) {
+        ensureExecutable(tunnelCommand.command);
+    }
     /**
      * name the machine as an individual command so that we don't
      * get prompt when launching the server
      */
-    console.log('RUN', codePath, ['tunnel', '--accept-server-license-terms', 'rename', machineId].join(' '));
-    await (0,execa__WEBPACK_IMPORTED_MODULE_2__/* .execa */ .r)(codePath, ['--help']);
     const startServer = await Promise.race([
         new Promise((resolve) => setTimeout(() => resolve(false), timeout)),
-        (0,execa__WEBPACK_IMPORTED_MODULE_2__/* .execa */ .r)(codePath, ['tunnel', '--accept-server-license-terms', 'rename', machineId]).then(() => true)
+        (0,execa__WEBPACK_IMPORTED_MODULE_3__/* .execa */ .r)(tunnelCommand.command, [...tunnelCommand.args, '--accept-server-license-terms', 'rename', machineId], { stdio: 'inherit' }).then(() => true)
     ]);
-    console.log(5);
     if (!startServer) {
         console.log('Timeout reached, continuing the build');
         return process.exit(0);
     }
-    console.log(6);
-    await (0,execa__WEBPACK_IMPORTED_MODULE_2__/* .execa */ .r)(codePath, ['tunnel', '--accept-server-license-terms'], {
-        stdio: [process.stdin, process.stdout, process.stderr]
+    await (0,execa__WEBPACK_IMPORTED_MODULE_3__/* .execa */ .r)(tunnelCommand.command, [...tunnelCommand.args, '--accept-server-license-terms'], {
+        stdio: 'inherit'
     });
 };
 /**
@@ -25046,6 +25089,14 @@ module.exports = require("net");
 
 /***/ }),
 
+/***/ 7561:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:fs");
+
+/***/ }),
+
 /***/ 612:
 /***/ ((module) => {
 
@@ -25118,7 +25169,7 @@ module.exports = require("util");
 
 /***/ }),
 
-/***/ 4626:
+/***/ 619:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
@@ -25973,8 +26024,8 @@ const setExitHandler = async (spawned, {cleanup, detached}, timedPromise) => {
 	});
 };
 
-;// CONCATENATED MODULE: external "node:fs"
-const external_node_fs_namespaceObject = require("node:fs");
+// EXTERNAL MODULE: external "node:fs"
+var external_node_fs_ = __nccwpck_require__(7561);
 ;// CONCATENATED MODULE: ./node_modules/is-stream/index.js
 function isStream(stream) {
 	return stream !== null
@@ -26015,7 +26066,7 @@ const isExecaChildProcess = target => target instanceof external_node_child_proc
 
 const pipeToTarget = (spawned, streamName, target) => {
 	if (typeof target === 'string') {
-		spawned[streamName].pipe((0,external_node_fs_namespaceObject.createWriteStream)(target));
+		spawned[streamName].pipe((0,external_node_fs_.createWriteStream)(target));
 		return spawned;
 	}
 
@@ -26072,7 +26123,7 @@ const getInputSync = ({input, inputFile}) => {
 	}
 
 	validateInputOptions(input);
-	return (0,external_node_fs_namespaceObject.readFileSync)(inputFile);
+	return (0,external_node_fs_.readFileSync)(inputFile);
 };
 
 // `input` and `inputFile` option in sync mode
@@ -26092,7 +26143,7 @@ const getInput = ({input, inputFile}) => {
 	}
 
 	validateInputOptions(input);
-	return (0,external_node_fs_namespaceObject.createReadStream)(inputFile);
+	return (0,external_node_fs_.createReadStream)(inputFile);
 };
 
 // `input` and `inputFile` option in async mode
