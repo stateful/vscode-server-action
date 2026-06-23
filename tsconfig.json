@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/node16/tsconfig.json",
+    "extends": "@tsconfig/node24/tsconfig.json",
     "include": [
       "./src/*.ts"
     ],
@@ -9,11 +9,12 @@
     ],
     "compilerOptions": {
       "module": "es2022",
+      "rootDir": "./src",
       "typeRoots": [
         "./types",
         "node_modules/@types"
       ],
-      "moduleResolution": "node",
+      "moduleResolution": "bundler",
       "outDir": "./lib",
       "esModuleInterop": true
     }
